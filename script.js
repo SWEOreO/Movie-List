@@ -9,6 +9,7 @@
   };
 
   const TOKEN = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyZWEzNTM4NTk3NGFkY2RkOWFlOTRhNDAwOWQwN2VhNyIsIm5iZiI6MTc0NTM2ODIwNC4xNzI5OTk5LCJzdWIiOiI2ODA4MzQ4Y2FjMDJkNDQwN2JhYjI1ZjciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.jFuUA7bOpK6YedyqEbE8AhQePkU_bsEUnTkn1awptVY'; 
+
   const options = {
     method: 'GET',
     headers: {
@@ -113,10 +114,10 @@
   const runApp = async () => {
     await fetchMovieList();
     renderMovies(state.movies, state.currentPage, state.totalPages);
-    attachEventListeners();
+    eventListeners();
   };
 
-  const attachEventListeners = () => {
+  const eventListeners = () => {
     elements.prevBtn.addEventListener("click", async () => {
       if (state.currentPage > 1) {
         await fetchMovieList(state.currentPage - 1);
