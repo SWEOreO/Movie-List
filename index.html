@@ -22,22 +22,22 @@
     </header>
 
     <main class="container">
-      <div class="search-bar">
+      <div class="filter-search-bar">
         <input type="text" id="search-input" placeholder="Search movies by title..." />
+        <div class="category-filter">
+          <form>
+            <label class="filter-movie">Category Filter:</label>
+            <select id="status" name="status">
+              <option value="select">Select Here</option>
+              <option value="now-playing">Now Playing</option>
+              <option value="now-playing">Popular</option>
+              <option value="top-rated">Top-Rated</option>
+              <option value="upcoming">Upcoming</option>
+            </select>
+          </form>
+        </div>
       </div>
 
-      <div class="filter">
-        <form>
-          <label class="filter-movie">Filter:</label>
-          <select id="status" name="status">
-            <option value="select">Select Here</option>
-            <option value="now-playing">Now Playing</option>
-            <option value="now-playing">Popular</option>
-            <option value="top-rated">Top-Rated</option>
-            <option value="upcoming">Upcoming</option>
-          </select>
-        </form>
-      </div>
       
       <div class="page-btn">
         <button id="previous-page-btn">Prev</button>

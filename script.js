@@ -8,6 +8,7 @@
     isLikeView: false,
     likedMoviesArray: [],
     currentPage: 1,
+    currentCategory: 'popular',
     totalPages: 1,
     itemsPerPage: 20,
   };
@@ -23,7 +24,7 @@
     },
   };
 
-  const fetchMovieList = async (page = 1) => {
+  const fetchMovieList = async (page = 1, category = state.currentCategory) => {
     try {
       const res = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc`, options);
       if (!res.ok) throw new Error("Network Response Error!");
@@ -116,7 +117,6 @@
   `;
   return div;
   };
-  
 
   // Render
   const renderMovies = (movies, currentPage, totalPages) => {
@@ -146,8 +146,6 @@
     renderMovies(pagedLiked, state.currentPage, state.totalPages);
   };
   
-  
-
   // Modal
   const showModal = (movie) => {
     const roundedRating = Math.round(movie.vote_average);
@@ -236,8 +234,6 @@
         elements.clearLikedBtn.classList.add("hidden");
       }
     });
-    
-    
   
     // Home-Menu
     elements.homeMenu.addEventListener('click', async (e) => {
@@ -246,7 +242,6 @@
       await fetchMovieList();
       renderMovies(state.movies, state.currentPage, state.totalPages);
     });
-
 
     // Page-Btn
     elements.prevBtn.addEventListener("click", async () => {
@@ -260,7 +255,6 @@
         }
       }
     });
-    
     elements.nextBtn.addEventListener("click", async () => {
       if (state.currentPage < state.totalPages) {
         state.currentPage++;
@@ -272,7 +266,6 @@
         }
       }
     });
-    
     elements.jumpBtn.addEventListener("click", async () => {
       const page = parseInt(elements.pageInput.value);
       if (!isNaN(page) && page >= 1 && page <= state.totalPages) {
@@ -287,7 +280,6 @@
       }
     });
     
-
     // Like-icon Click / Toggle like
     elements.movieContainer.addEventListener('click', async (e) => {
       if (!e.target.classList.contains('like-icon')) return;
@@ -318,7 +310,6 @@
       saveLikedMovies();
     });
     
-
     //Show modal
     elements.movieContainer.addEventListener("click", async (e) => {
       if (e.target.classList.contains("movie-name")) {
@@ -364,6 +355,5 @@
     });
     
   
-
   runApp();
 
