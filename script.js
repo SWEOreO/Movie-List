@@ -24,11 +24,25 @@
     },
   };
 
+  const categoryURLs = {
+    now_playing: `https://api.themoviedb.org/3/movie/now_playing`,
+    popular: `https://api.themoviedb.org/3/movie/popular`,
+    top_rated: `https://api.themoviedb.org/3/movie/top_rated`,
+    upcoming: `https://api.themoviedb.org/3/movie/upcoming`
+  };
+  
   const fetchMovieList = async (page = 1, category = state.currentCategory) => {
     try {
-      const res = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc`, options);
+      const validCategory = categoryURLs[category];
+      if (!validCategory) {
+        throw new Error(`Invalid category: ${category}`);
+      }
+  
+      const url = `${validCategory}?language=en-US&page=${page}`;
+      const res = await fetch(url, options);
       if (!res.ok) throw new Error("Network Response Error!");
       const data = await res.json();
+  
       state.movies = data.results.map((movie) => ({
         ...movie,
         isLiked: state.likedMovies.has(movie.id),
@@ -39,6 +53,7 @@
       console.error("Error fetching movie list:", err);
     }
   };
+  
 
   const fetchMovieDetails = async (movieId) => {
     try {
@@ -71,6 +86,7 @@
   // Orgnize all needed elements
   const elements = {
     searchInput: document.getElementById('search-input'),
+    categorySelect: document.getElementById('category-select'), 
     likeMenu: document.getElementById('like-menu'),
     homeMenu: document.getElementById('home-menu'),
     movieContainer: document.querySelector('.movie-container'),
@@ -81,6 +97,7 @@
     pageText: document.querySelector('.page-btn p'),
     pageInput: document.getElementById('page-input'),
     jumpBtn: document.getElementById('jump-btn'),
+    backToTopBtn: document.getElementById('back-to-top'),
     modal: document.getElementById('movie-modal'),
     modalTitle: document.getElementById('modal-title'),
     modalImage: document.getElementById('modal-image'),
@@ -204,6 +221,17 @@
         movie.title.toLowerCase().includes(keyword)
       );
       renderMovies(filteredMovies, state.currentPage, state.totalPages);
+    });
+
+    // catergory-filter
+    elements.categorySelect.addEventListener('change', async (e) => {
+      const selectedCategory = e.target.value;
+      state.currentCategory = selectedCategory;
+      state.currentPage = 1;
+      state.isLikeView = false;
+
+      await fetchMovieList();
+      renderMovies(state.movies, state.currentPage, state.totalPages);
     });
 
     // Like-Menu
@@ -330,17 +358,15 @@
   };
 
     //Back-to-Top Button
-    const backToTopBtn = document.getElementById('back-to-top');
-
     window.addEventListener("scroll", () => {
       if (window.scrollY > 300) {
-        backToTopBtn.classList.add("show");
+        elements.backToTopBtn.classList.add("show");
       } else {
-        backToTopBtn.classList.remove("show");
+        elements.backToTopBtn.classList.remove("show");
       }
     });
 
-    backToTopBtn.addEventListener("click", () => {
+    elements.backToTopBtn.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
