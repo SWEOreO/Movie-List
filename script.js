@@ -6,8 +6,10 @@
     movieDetails: [],
     likedMovies: new Set(),
     isLikeView: false,
+    likedMoviesArray: [],
     currentPage: 1,
     totalPages: 1,
+    itemsPerPage: 20,
   };
 
   // Fetch backend data
@@ -57,6 +59,13 @@
     if (saved) state.likedMovies = new Set(JSON.parse(saved));
   };
 
+  const updateLikedMoviesArray = () => {
+    const likedMovieIds = Array.from(state.likedMovies);
+    state.likedMoviesArray = state.movies.filter(movie => likedMovieIds.includes(movie.id));
+    state.totalPages = Math.ceil(state.likedMoviesArray.length / state.itemsPerPage);
+  };
+
+
   //View
   // Orgnize all needed elements
   const elements = {
@@ -64,6 +73,8 @@
     likeMenu: document.getElementById('like-menu'),
     homeMenu: document.getElementById('home-menu'),
     movieContainer: document.querySelector('.movie-container'),
+    noLikedMessage: document.getElementById('no-liked-message'),
+    clearLikedBtn: document.getElementById('clear-liked-btn'),
     prevBtn: document.getElementById('previous-page-btn'),
     nextBtn: document.getElementById('next-page-btn'),
     pageText: document.querySelector('.page-btn p'),
@@ -119,6 +130,23 @@
     elements.prevBtn.disabled = currentPage === 1;
     elements.nextBtn.disabled = currentPage === totalPages;    
   };
+
+  const renderLikedMoviesPage = () => {
+    const startIdx = (state.currentPage - 1) * state.itemsPerPage;
+    const endIdx = startIdx + state.itemsPerPage;
+    const pagedLiked = state.likedMoviesArray.slice(startIdx, endIdx);
+  
+    // Show/hide no liked message
+    if (state.likedMoviesArray.length === 0) {
+      elements.noLikedMessage.classList.remove("hidden");
+    } else {
+      elements.noLikedMessage.classList.add("hidden");
+    }
+  
+    renderMovies(pagedLiked, state.currentPage, state.totalPages);
+  };
+  
+  
 
   // Modal
   const showModal = (movie) => {
@@ -181,13 +209,36 @@
     });
 
     // Like-Menu
-    elements.likeMenu.addEventListener('click', (e) => {
+    elements.likeMenu.addEventListener('click', async (e) => {
       e.preventDefault();
       state.isLikeView = true;
-      const likedArr = state.movies.filter((m) => m.isLiked);
-      renderMovies(likedArr, 1, 1);
+    
+      const likedIds = Array.from(state.likedMovies);
+    
+      const likedDetails = await Promise.all(
+        likedIds.map(id => fetchMovieDetails(id))
+      );
+    
+      const likedMovies = likedDetails.map(movie => ({
+        ...movie,
+        isLiked: true,
+      }));
+    
+      state.likedMoviesArray = likedMovies;
+      state.currentPage = 1;
+      state.totalPages = Math.ceil(likedMovies.length / state.itemsPerPage);
+    
+      renderLikedMoviesPage();
+    
+      if (likedMovies.length > 0) {
+        elements.clearLikedBtn.classList.remove("hidden");
+      } else {
+        elements.clearLikedBtn.classList.add("hidden");
+      }
     });
-
+    
+    
+  
     // Home-Menu
     elements.homeMenu.addEventListener('click', async (e) => {
       e.preventDefault();
@@ -200,25 +251,42 @@
     // Page-Btn
     elements.prevBtn.addEventListener("click", async () => {
       if (state.currentPage > 1) {
-        await fetchMovieList(state.currentPage - 1);
-        renderMovies(state.movies, state.currentPage, state.totalPages);
-      } 
-    });
-    elements.nextBtn.addEventListener("click", async () => {
-      if (state.currentPage < state.totalPages) {
-        await fetchMovieList(state.currentPage + 1);
-        renderMovies(state.movies, state.currentPage, state.totalPages);
+        state.currentPage--;
+        if (state.isLikeView) {
+          renderLikedMoviesPage();
+        } else {
+          await fetchMovieList(state.currentPage);
+          renderMovies(state.movies, state.currentPage, state.totalPages);
+        }
       }
     });
+    
+    elements.nextBtn.addEventListener("click", async () => {
+      if (state.currentPage < state.totalPages) {
+        state.currentPage++;
+        if (state.isLikeView) {
+          renderLikedMoviesPage();
+        } else {
+          await fetchMovieList(state.currentPage);
+          renderMovies(state.movies, state.currentPage, state.totalPages);
+        }
+      }
+    });
+    
     elements.jumpBtn.addEventListener("click", async () => {
       const page = parseInt(elements.pageInput.value);
       if (!isNaN(page) && page >= 1 && page <= state.totalPages) {
-        state.isLikeView = false;
-        await fetchMovieList(page);
-        renderMovies(state.movies, state.currentPage, state.totalPages);
-        pageInput.value = "";
+        state.currentPage = page;
+        if (state.isLikeView) {
+          renderLikedMoviesPage();
+        } else {
+          await fetchMovieList(page);
+          renderMovies(state.movies, state.currentPage, state.totalPages);
+        }
+        elements.pageInput.value = "";
       }
     });
+    
 
     // Like-icon Click / Toggle like
     elements.movieContainer.addEventListener('click', async (e) => {
@@ -285,7 +353,17 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-
+    // Clear All Liked
+    elements.clearLikedBtn.addEventListener("click", () => {
+      state.likedMovies.clear();
+      saveLikedMovies();
+    
+      state.movies = [];
+      renderMovies([], 1, 1);
+      elements.clearLikedBtn.classList.add("hidden");
+    });
+    
+  
 
   runApp();
 
