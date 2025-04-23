@@ -35,9 +35,9 @@
       </div>
       
       <div class="page-btn">
-        <button id="previous-page-btn">previous</button>
+        <button id="previous-page-btn">Prev</button>
         <p>current-page / total-page</p>
-        <button id="next-page-btn">next</button>
+        <button id="next-page-btn">Next</button>
       </div>
 
       <div class="movie-container">
@@ -54,12 +54,18 @@
 
       <div id="movie-modal" class="modal hidden">
         <div class="modal-content">
+          <img id="modal-image" src="" alt="Movie Poster" />
+          <div class="modal-details">
+            <h2 id="modal-title"></h2>
+            <p id="modal-overview"></p>
+            <p><strong>Release Year:</strong> <span id="modal-release-year"></span></p>
+            <p><strong>Run Time:</strong> <span id="modal-runtime"></span></p>
+            <p><strong>Genres:</strong> <span id="modal-genres"></span></p>
+            <p><strong>Rating:</strong> <span id="modal-rating"></span></p>
+            <div id="modal-companies" class="modal-companies"></div>
+
+          </div>
           <span class="close-button">&times;</span>
-          <img id="modal-image" src="" alt="Movie Image" />
-          <h2 id="modal-title"></h2>
-          <p><strong>Overview:</strong> <span id="modal-overview"></p>
-          <p><strong>Rating:</strong> <span id="modal-rating"></span></p>
-          <p><strong>Production Companies:</strong> <span id="modal-companies"></span></p>
         </div>
       </div>
 

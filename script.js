@@ -51,6 +51,9 @@
     modalTitle: document.getElementById("modal-title"),
     modalImage: document.getElementById("modal-image"),
     modalOverview: document.getElementById("modal-overview"),
+    modalReleaseYear: document.getElementById("modal-release-year"),
+    modalRuntime: document.getElementById("modal-runtime"),
+    modalGenres: document.getElementById("modal-genres"),
     modalRating: document.getElementById("modal-rating"),
     modalCompanies: document.getElementById("modal-companies"),
     closeButton: document.querySelector(".close-button"),
@@ -100,11 +103,25 @@
   const showModal = (movie) => {
     elements.modalTitle.textContent = movie.title;
     elements.modalOverview.textContent = movie.overview;
-    elements.modalRating.textContent = movie.vote_average;
+    elements.modalRuntime.textContent = `${movie.runtime || "N/A"} min`;
+    elements.modalGenres.textContent = `${movie.genres.map(g => g.name).join(", ")}`;
+    elements.modalRating.textContent = `${movie.vote_average}`;
     elements.modalImage.src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-    elements.modalCompanies.textContent = movie.production_companies.map(c => c.name).join(", ");
+    elements.modalCompanies.innerHTML = movie.production_companies
+    .filter(c => c.logo_path)
+    .map(c => `
+      <img src="https://image.tmdb.org/t/p/w300${c.logo_path}" 
+      alt="${c.name}" 
+      title="${c.name}" 
+      class="company-logo" />
+      `)
+      .join("");
+      
+    const year = movie.release_date ? new Date(movie.release_date).getFullYear() : "N/A";
+    elements.modalReleaseYear.textContent = `${year}`;
     elements.modal.classList.remove("hidden");
   };
+  
 
   const hideModal = () => {
     elements.modal.classList.add("hidden");

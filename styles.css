@@ -60,9 +60,9 @@ header.title-logo {
 }
 
 .page-btn button {
-  width: 90px;
+  width: 60px;
   height: 30px;
-  border-radius: 60%;
+  border-radius: 50%;
   border: none;
   background-color: #3b82f6;
   color: white;
@@ -100,6 +100,11 @@ header.title-logo {
   margin: 0.5rem;
 }
 
+.movie-name:hover {
+  color: skyblue; 
+  cursor: pointer;
+}
+
 .movie-card img {
   width: 100%;
   height: auto;
@@ -110,7 +115,6 @@ header.title-logo {
   color: #555;
   margin-bottom: 0.5rem;
 }
-
 
 .movie-icons {
   display: flex;
@@ -149,9 +153,10 @@ header.title-logo {
 
 .modal-content {
   background: #fff;
+  display: flex; 
   gap: 1.5rem;
   padding: 2rem;
-  border-radius: 12px;
+  border-radius: 15px;
   max-width: 800px;
   width: 90%;
   position: relative;
@@ -167,25 +172,55 @@ header.title-logo {
 }
 
 .modal-content img#modal-image {
-  width: 600px;
+  width: 300px;
   height: auto;
-  border-radius: 8px;
+  border-radius: 10px;
   object-fit: cover;
   max-height: 500px;
 }
 
-.modal-content h2#modal-title {
-  margin-top: 0;
-  font-size: 1.8rem;
-  font-weight: bold;;
+.modal-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-.modal-content p {
+.modal-details h2#modal-title {
+  margin-bottom: 15px;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.modal-details p {
   margin: 0.5rem;
   line-height: 1.5;
   color: #333;
 }
 
+#modal-genres {
+  font-style: italic;
+  color: #666;
+  margin: 0.5rem 0;
+}
+
+.modal-companies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.company-logo {
+  height: 30px;
+  object-fit: contain;
+  border-radius: 6px;
+  background-color: #f0f0f0;
+  padding: 5px;
+}
+
+.close-button:hover {
+  color: skyblue; 
+}
 
 /* Responsive*/
 @media (max-width: 1024px) {
