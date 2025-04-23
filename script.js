@@ -67,7 +67,7 @@
     div.innerHTML = `
       <img src="${path}" alt="${movie.title}" />
       <h4 class="movie-name">${movie.title}</h4>
-      <p>Rating: ${movie.vote_average}</p>
+      <p>Rating: ${Number(movie.vote_average).toFixed(2)}</p>
       <div class="movie-icons">
         <i class="ion-ios-star-outline star-icon" data-movie-id="${movie.id}"></i>
         <i class="ion-ios-heart-outline like-icon" data-movie-id="${movie.id}"></i>
@@ -109,7 +109,7 @@
     elements.modalOverview.textContent = movie.overview;
     elements.modalRuntime.textContent = `${movie.runtime || "N/A"} min`;
     elements.modalGenres.textContent = `${movie.genres.map(g => g.name).join(", ")}`;
-    elements.modalRating.textContent = `${movie.vote_average}`;
+    elements.modalRating.textContent = `${Number(movie.vote_average).toFixed(2)}`;
     elements.modalImage.src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
     elements.modalCompanies.innerHTML = movie.production_companies
     .filter(c => c.logo_path)
@@ -146,7 +146,7 @@
       );
       renderMovies(filteredMovies, state.currentPage, state.totalPages);
     });
-    
+
     elements.prevBtn.addEventListener("click", async () => {
       if (state.currentPage > 1) {
         await fetchMovieList(state.currentPage - 1);
