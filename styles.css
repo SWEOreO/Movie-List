@@ -79,6 +79,10 @@ header.title-logo {
   gap: 1rem;
 }
 
+.page-btn p {
+  font-size: 1rem;
+  font-weight: bold;
+}
 .page-btn button {
   width: 60px;
   height: 30px;
@@ -93,11 +97,6 @@ header.title-logo {
 
 .page-btn button:hover {
   background-color: #2563eb; 
-}
-
-.page-btn p {
-  font-size: 1rem;
-  font-weight: bold;
 }
 
 button:disabled {
@@ -169,6 +168,22 @@ button:disabled {
   font-size: 1.5rem;
 }
 
+.back-to-top {
+  position: fixed;
+  bottom: 40px;
+  right: 30px;
+  font-size: 18px;
+  background-color: #333;
+  color: white;
+  padding: 12px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: none;
+}
+
+.back-to-top.show {
+  display: block;
+}
 
 /* Modal */
 .modal {

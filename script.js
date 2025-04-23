@@ -5,6 +5,7 @@
     movies: [],
     movieDetails: [],
     likedMovies: new Set(),
+    isLikeView: false,
     currentPage: 1,
     totalPages: 1,
   };
@@ -25,7 +26,10 @@
       const res = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc`, options);
       if (!res.ok) throw new Error("Network Response Error!");
       const data = await res.json();
-      state.movies = data.results;
+      state.movies = data.results.map((movie) => ({
+        ...movie,
+        isLiked: state.likedMovies.has(movie.id),
+      }));
       state.currentPage = data.page;
       state.totalPages = data.total_pages;
     } catch (err) {
@@ -63,6 +67,8 @@
     prevBtn: document.getElementById('previous-page-btn'),
     nextBtn: document.getElementById('next-page-btn'),
     pageText: document.querySelector('.page-btn p'),
+    pageInput: document.getElementById('page-input'),
+    jumpBtn: document.getElementById('jump-btn'),
     modal: document.getElementById('movie-modal'),
     modalTitle: document.getElementById('modal-title'),
     modalImage: document.getElementById('modal-image'),
@@ -177,16 +183,19 @@
     // Like-Menu
     elements.likeMenu.addEventListener('click', (e) => {
       e.preventDefault();
-      const likedArr = state.movies.filter((m) => state.likedMovies.has(m.id));
+      state.isLikeView = true;
+      const likedArr = state.movies.filter((m) => m.isLiked);
       renderMovies(likedArr, 1, 1);
     });
 
-     // Home-Menu
+    // Home-Menu
     elements.homeMenu.addEventListener('click', async (e) => {
       e.preventDefault();
+      state.isLikeView = false;
       await fetchMovieList();
       renderMovies(state.movies, state.currentPage, state.totalPages);
     });
+
 
     // Page-Btn
     elements.prevBtn.addEventListener("click", async () => {
@@ -201,24 +210,46 @@
         renderMovies(state.movies, state.currentPage, state.totalPages);
       }
     });
+    elements.jumpBtn.addEventListener("click", async () => {
+      const page = parseInt(elements.pageInput.value);
+      if (!isNaN(page) && page >= 1 && page <= state.totalPages) {
+        state.isLikeView = false;
+        await fetchMovieList(page);
+        renderMovies(state.movies, state.currentPage, state.totalPages);
+        pageInput.value = "";
+      }
+    });
 
     // Like-icon Click / Toggle like
-    elements.movieContainer.addEventListener('click', (e) => {
+    elements.movieContainer.addEventListener('click', async (e) => {
       if (!e.target.classList.contains('like-icon')) return;
-
-      const isLikedId = +e.target.dataset.movieId;
-      if (state.likedMovies.has(isLikedId)) {
-        state.likedMovies.delete(isLikedId);
-        e.target.classList.replace('ion-ios-heart', 'ion-ios-heart-outline');
-        e.target.classList.remove('liked');
-      } else {
-        state.likedMovies.add(isLikedId);
+    
+      const movieId = +e.target.dataset.movieId;
+      const movie = state.movies.find(m => m.id === movieId);
+    
+      if (!movie) return;
+    
+      movie.isLiked = !movie.isLiked;
+    
+      if (movie.isLiked) {
+        state.likedMovies.add(movieId);
         e.target.classList.replace('ion-ios-heart-outline', 'ion-ios-heart');
         e.target.classList.add('liked');
+      } else {
+        state.likedMovies.delete(movieId);
+        e.target.classList.replace('ion-ios-heart', 'ion-ios-heart-outline');
+        e.target.classList.remove('liked');
+    
+        // If on Like-menu view, remove movie from display
+        if (state.isLikeView) {
+          const likedArr = state.movies.filter((m) => m.isLiked);
+          renderMovies(likedArr, 1, 1);
+        }
       }
-
+    
       saveLikedMovies();
     });
+    
 
     //Show modal
     elements.movieContainer.addEventListener("click", async (e) => {
@@ -238,6 +269,22 @@
       if (e.target === elements.modal) hideModal();
     });
   };
+
+    //Back-to-Top Button
+    const backToTopBtn = document.getElementById('back-to-top');
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add("show");
+      } else {
+        backToTopBtn.classList.remove("show");
+      }
+    });
+
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
 
 
   runApp();
