@@ -43,6 +43,7 @@
 
   //View
   const elements = {
+    searchInput: document.getElementById("search-input"),
     movieContainer: document.querySelector(".movie-container"),
     prevBtn: document.getElementById("previous-page-btn"),
     nextBtn: document.getElementById("next-page-btn"),
@@ -60,10 +61,11 @@
   };
 
   const createMovieCard = (movie) => {
-    const div = document.createElement("div");
+    const path = movie.poster_path === null ? `./no-image-img.png` : `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+    const div = document.createElement("div"); 
     div.className = "movie-card";
     div.innerHTML = `
-      <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+      <img src="${path}" alt="${movie.title}" />
       <h4 class="movie-name">${movie.title}</h4>
       <p>Rating: ${movie.vote_average}</p>
       <div class="movie-icons">
@@ -82,6 +84,8 @@
     });
 
     elements.pageText.textContent = `Page ${currentPage} / ${totalPages}`;
+    elements.prevBtn.disabled = currentPage === 1;
+    elements.nextBtn.disabled = currentPage === totalPages;
 
     document.querySelectorAll(".like-icon").forEach(icon => {
       icon.addEventListener("click", () => {
@@ -135,11 +139,19 @@
   };
 
   const eventListeners = () => {
+    elements.searchInput.addEventListener("input", (e) => {
+      const keyword = e.target.value.toLowerCase();
+      const filteredMovies = state.movies.filter((movie) =>
+        movie.title.toLowerCase().includes(keyword)
+      );
+      renderMovies(filteredMovies, state.currentPage, state.totalPages);
+    });
+    
     elements.prevBtn.addEventListener("click", async () => {
       if (state.currentPage > 1) {
         await fetchMovieList(state.currentPage - 1);
         renderMovies(state.movies, state.currentPage, state.totalPages);
-      }
+      } 
     });
 
     elements.nextBtn.addEventListener("click", async () => {
