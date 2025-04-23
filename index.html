@@ -1,0 +1,57 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie DB</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <script src="movie.js" defer></script>
+  </head>
+
+  <body>
+    <header class="title-logo">
+      <div class="logo">
+        <img src="./MovieDB.svg" alt="MovieDB-Logo">
+      </div>
+      <h1 class="movieDB-title">Movie List</h1>
+      <nav class="nav-bar">
+        <menu id="home">Home</menu> 
+        <menu id="liked">Liked</menu>
+      </nav>
+    </header>
+
+    <main class="container">
+      <div class="filter">
+        <form>
+          <label class="filter-movie">Filter:</label>
+          <select id="status" name="status">
+            <option value="select">Select Here</option>
+            <option value="now-playing">Now Playing</option>
+            <option value="now-playing">Popular</option>
+            <option value="top-rated">Top-Rated</option>
+            <option value="upcoming">Upcoming</option>
+          </select>
+        </form>
+      </div>
+      
+      <div class="page-btn">
+        <button id="previous-page-btn">previous</button>
+        <p>current-page / total-page</p>
+        <button id="next-page-btn">next</button>
+      </div>
+
+      <div class="movie-container">
+        <div class="movie-card">
+          <img src="./no-image-img.png" alt="movie-id">
+          <h4 class="movie-name">movie name</h4>
+          <p>rating number</p>
+          <div class="movie-icons">
+            <i class="ion-ios-star-outline star-icon"></i>
+            <i class="ion-ios-heart-outline like-icon"></i>
+          </div>
+        </div>
+      </div>
+    </main>
+
+  </body>
+</html>
