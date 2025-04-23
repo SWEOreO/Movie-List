@@ -98,6 +98,22 @@
       </div>
   `;
   return div;
+      <div class="movie-card" data-id="${movie.id}">
+        <img src="${path}" alt="${movie.title}" />
+        <h4 class="movie-name">${movie.title}</h4>
+        <div class="movie-icons">
+          <div class="rating-display">
+            <i class="ion-ios-star star"></i>
+            ${movie.vote_average.toFixed(2)}
+          </div>
+          <i class="${heartClass} like-icon" data-movie-id="${movie.id}"></i>
+        </div>
+      </div>
+    `;
+  
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = cardHTML;
+    return wrapper.firstElementChild;
   };
   
 

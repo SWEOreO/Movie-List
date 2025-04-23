@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)http://127.0.0.1:5500/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie DB</title>
+    <link rel="stylesheet" href="./Movie DB_files/styles.css">
+    <link rel="stylesheet" href="./Movie DB_files/ionicons.min.css">
+    <script src="./Movie DB_files/script.js" defer=""></script>
+  </head>
+
+  <body>
+    <header class="title-logo">
+      <div class="logo">
+        <img src="./Movie DB_files/MovieDB.svg" alt="MovieDB-Logo">
+      </div>
+      <h1 class="movieDB-title">Movie List</h1>
+      <nav class="nav-bar">
+        <menu id="home-menu">Home</menu>
+        <menu id="like-menu">Like</menu>
+      </nav>
+    </header>
+
+    <main class="container">
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search movies by title...">
+      </div>
+
+      <div class="filter">
+        <form>
+          <label class="filter-movie">Filter:</label>
+          <select id="status" name="status">
+            <option value="select">Select Here</option>
+            <option value="now-playing">Now Playing</option>
+            <option value="now-playing">Popular</option>
+            <option value="top-rated">Top-Rated</option>
+            <option value="upcoming">Upcoming</option>
+          </select>
+        </form>
+      </div>
+      
+      <div class="page-btn">
+        <button id="previous-page-btn">Prev</button>
+        <p>current-page / total-page</p>
+        <button id="next-page-btn">Next</button>
+      </div>
+
+      <div class="movie-container">
+        <div class="movie-card">
+          <img src="./Movie DB_files/no-image-img.png" alt="movie-id">
+          <h4 class="movie-name">movie name</h4>
+          <div class="movie-icons">
+            <div class="rating-display">
+              <i class="ion-ios-star star"></i>
+            </div>
+            <i class="ion-ios-heart-outline like-icon"></i>
+          </div>
+        </div>
+      </div>
+
+      <div id="movie-modal" class="modal hidden">
+        <div class="modal-content">
+          <img id="modal-image" src="http://127.0.0.1:5500/index.html" alt="Movie Poster">
+          <div class="modal-details">
+            <h2 id="modal-title"></h2>
+            <p id="modal-overview"></p>
+            <p><strong>Release Year:</strong> <span id="modal-release-year"></span></p>
+            <p><strong>Run Time:</strong> <span id="modal-runtime"></span></p>
+            <p><strong>Genres:</strong> <span id="modal-genres"></span></p>
+            <p><strong>Rating:</strong> <span id="modal-rating"></span></p>
+            <div id="modal-companies" class="modal-companies"></div>
+
+          </div>
+          <span class="close-button">×</span>
+        </div>
+      </div>
+    </main>
+
+  <!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+</body></html>

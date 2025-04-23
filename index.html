@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -15,8 +16,8 @@
       </div>
       <h1 class="movieDB-title">Movie List</h1>
       <nav class="nav-bar">
-        <menu id="home">Home</menu> 
-        <menu id="liked">Liked</menu>
+        <menu id="home-menu">Home</menu>
+        <menu id="like-menu">Like</menu>
       </nav>
     </header>
 
@@ -49,7 +50,9 @@
           <img src="./no-image-img.png" alt="movie-id">
           <h4 class="movie-name">movie name</h4>
           <div class="movie-icons">
-            <i class="star-icon"></i>
+            <div class="rating-display">
+              <i class="ion-ios-star star"></i>
+            </div>
             <i class="ion-ios-heart-outline like-icon"></i>
           </div>
         </div>
@@ -71,7 +74,6 @@
           <span class="close-button">&times;</span>
         </div>
       </div>
-
     </main>
 
   </body>
