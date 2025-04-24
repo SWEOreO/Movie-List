@@ -311,7 +311,9 @@
     // Like-icon Click / Toggle like
     elements.movieContainer.addEventListener('click', async (e) => {
       if (!e.target.classList.contains('like-icon')) return;
-    
+      
+      // Quick way to convert string to Number
+      // const movieId = Number(e.target.dataset.movieId);
       const movieId = +e.target.dataset.movieId;
       const movie = state.movies.find(m => m.id === movieId);
     
