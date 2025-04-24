@@ -2,13 +2,13 @@
   //Model
   // create storage
   const state = {
+    currentCategory: 'popular',
     movies: [],
     movieDetails: [],
     likedMovies: new Set(),
     isLikeView: false,
     likedMoviesArray: [],
     currentPage: 1,
-    currentCategory: 'popular',
     totalPages: 1,
     itemsPerPage: 20,
   };
@@ -24,6 +24,7 @@
     },
   };
 
+  // Category filter path
   const categoryURLs = {
     now_playing: `https://api.themoviedb.org/3/movie/now_playing`,
     popular: `https://api.themoviedb.org/3/movie/popular`,
@@ -31,6 +32,7 @@
     upcoming: `https://api.themoviedb.org/3/movie/upcoming`
   };
   
+  //Fetch API by Page and Category
   const fetchMovieList = async (page = 1, category = state.currentCategory) => {
     try {
       const validCategory = categoryURLs[category];
@@ -54,7 +56,7 @@
     }
   };
   
-
+  // Fetch API by movieId
   const fetchMovieDetails = async (movieId) => {
     try {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, options);
@@ -80,7 +82,6 @@
     state.likedMoviesArray = state.movies.filter(movie => likedMovieIds.includes(movie.id));
     state.totalPages = Math.ceil(state.likedMoviesArray.length / state.itemsPerPage);
   };
-
 
   //View
   // Orgnize all needed elements
@@ -115,7 +116,6 @@
     const path = movie.poster_path
       ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
       : './no-image-img.png';
-  
     const liked = state.likedMovies.has(movie.id);
     const heartClass = liked ? 'ion-ios-heart liked' : 'ion-ios-heart-outline';
     const div = document.createElement("div"); 
